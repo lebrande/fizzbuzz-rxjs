@@ -1,42 +1,39 @@
 import 'bulma';
-import { fromEvent, interval, range } from 'rxjs';
-import { scan, startWith } from 'rxjs/operators';
+import { fromEvent, range, interval } from 'rxjs';
+import { startWith, scan } from 'rxjs/operators';
 
 const app = document.getElementById('app');
-// najpierw zrobić bez funkcji
-const createItem = (fizzBuzzNumber: number) => {
-  let text: string = `${fizzBuzzNumber}`;
-
-  if (fizzBuzzNumber % 15 === 0) {
-    text = 'FizzBuzz';
-  } else if (fizzBuzzNumber % 3 === 0) {
-    text = 'Fizz';
-  } else if (fizzBuzzNumber % 5 === 0) {
-    text = 'Buzz';
-  }
-
-  const item = document.createElement('p');
-  item.classList.add('notification', 'is-info');
-  item.innerText = `${fizzBuzzNumber} -> ${text}`;
-  app.appendChild(item);
-}
 
 // sposób 1 wypisz od razu
-const numbers$ = range(0, 100);
-const fizzBuzz$ = numbers$;
+// const numbers$ = range(0, 100);
 
 // sposób 2 wypisz na kliknięcie
-const clicks$ = fromEvent(document, 'click');
-// const fizzBuzz$ = clicks$.pipe(
-//   startWith(0),
-//   scan<number>((acc) => acc + 1)
-// );
+// const click$ = fromEvent(document, 'click')
+//   .pipe(
+//     startWith(0),
+//     scan<number>((acc) => acc + 1),
+//   );
 
 // sposób 3 wypisz co sekundę
-// const timer$ = interval(1000);
-// const fizzBuzz$ = timer$.pipe(
-//   startWith(0),
-//   scan<number>((acc) => acc + 1)
-// );
+const timer$ = interval(1000);
 
-fizzBuzz$.subscribe(createItem);
+const fizBuzz$ = timer$;
+
+fizBuzz$.subscribe((n) => {
+  let text: string;
+
+  if (n % 3 === 0 && n % 5 === 0) {
+    text = 'FizzBuzz';
+  } else if (n % 3 === 0) {
+    text = 'Fizz';
+  } else if (n % 5 === 0) {
+    text = 'Buzz';
+  } else {
+    text = `${n}`;  
+  }
+
+  const item = document.createElement('div');
+  item.innerText = text;
+  item.classList.add('notification', 'is-info');
+  app.appendChild(item);
+});
